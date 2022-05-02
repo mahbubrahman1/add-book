@@ -1,5 +1,6 @@
 // get element from UI
 let bookForm = document.getElementById('book-form');
+let bookList = document.getElementById('book-list');
 
 // input book class
 class Book {
@@ -46,10 +47,18 @@ class Display {
             document.querySelector('.alert').remove();
         }, 2000);
     }
+
+    // remove icon working
+    removeFromList(target) {
+        if (target.hasAttribute('href')) {
+            target.parentElement.parentElement.remove();
+        }
+    }
 }
 
 // add event listener
 bookForm.addEventListener('submit', newBook);
+bookList.addEventListener('click', removeBook);
 
 // define function & alert
 function newBook(event) {
@@ -67,5 +76,13 @@ function newBook(event) {
         display.showAlert('Book added!', 'success');
     }
 
+    event.preventDefault();
+}
+
+// remove book from table
+function removeBook(event) {
+    let display = new Display();
+    display.removeFromList(event.target);
+    display.showAlert('Book removed!', 'success');
     event.preventDefault();
 }
