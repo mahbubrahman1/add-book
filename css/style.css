@@ -2,16 +2,18 @@ body {
     font-family: 'Montserrat', sans-serif;
 }
 
-.success, .failed {
+.success,
+.fail {
     color: white;
     padding: 5px;
     margin: 5px 0 15px 0;
+    border-radius: 4px;
 }
 
-.success{
+.success {
     background: green;
 }
 
-.failed {
+.fail {
     background: red;
 }
