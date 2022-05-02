@@ -30,6 +30,14 @@ class Display {
         document.getElementById('author-input').value = '';
         document.getElementById('isbn-input').value = '';
     }
+    showAlert(message, className) {
+        let div = document.createElement('div');
+        div.className = `alert ${className}`;
+        div.appendChild(document.createTextNode(message));
+        let container = document.getElementsByClassName('container');
+        let form = document.getElementById('book-form');
+        container.insertBefore(div, form);
+    }
 }
 
 // add event listener
@@ -40,10 +48,14 @@ function newBook(event) {
     let title = document.getElementById('title-input').value;
     let author = document.getElementById('author-input').value;
     let isbn = document.getElementById('isbn-input').value;
-    let book = new Book(title, author, isbn);
     let display = new Display();
-    display.addBookList(book);
-    display.clearInputText();
+    if (title == '' || author == '' || isbn == '') {
+        display.showAlert('Please fill all the fields!', 'failed');
+    } else {
+        let book = new Book(title, author, isbn);
+        display.addBookList(book);
+        display.clearInputText();
+    }
 
     event.preventDefault();
 }
