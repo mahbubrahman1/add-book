@@ -13,7 +13,7 @@ class Book {
 
 // display book in table class
 class Display {
-    static addBookList(book) {
+    static addToBookList(book) {
         let bookList = document.getElementById('book-list');
         let row = document.createElement('tr');
         row.innerHTML = `
@@ -49,14 +49,54 @@ class Display {
     static removeFromList(target) {
         if (target.hasAttribute('href')) {
             target.parentElement.parentElement.remove();
+            Store.removeBook(target.parentElement.previousElementSibling.textContent.trim());
             Display.showAlert('Book removed!', 'success');
         }
+    }
+}
+
+// local storage class
+class Store {
+    static getBooks() {
+        let books;
+        if (localStorage.getItem('books') == null) {
+            books = [];
+        } else {
+            books = JSON.parse(localStorage.getItem('books'));
+        }
+        return books;
+    }
+
+    static addBook(book) {
+        let books = Store.getBooks();
+        books.push(book);
+
+        localStorage.setItem('books', JSON.stringify(books));
+    }
+
+    static displayBooks() {
+        let books = Store.getBooks();
+        books.forEach(book => {
+            Display.addToBookList(book);
+        });
+    }
+
+    static removeBook(isbn) {
+        let books = Store.getBooks();
+        books.forEach((book, index) => {
+            if (book.isbn == isbn) {
+                books.splice(index, 1);
+            }
+        });
+
+        localStorage.setItem('books', JSON.stringify(books));
     }
 }
 
 // add event listener
 bookForm.addEventListener('submit', newBook);
 bookList.addEventListener('click', removeBook);
+document.addEventListener('DOMContentLoaded', Store.displayBooks());
 
 // define function & alert
 function newBook(event) {
@@ -68,9 +108,13 @@ function newBook(event) {
         Display.showAlert('Please fill all the fields!', 'fail');
     } else {
         let book = new Book(title, author, isbn);
-        Display.addBookList(book);
+        Display.addToBookList(book);
+
         Display.clearInputText();
+
         Display.showAlert('Book added!', 'success');
+
+        Store.addBook(book);
     }
 
     event.preventDefault();
