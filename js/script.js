@@ -13,10 +13,7 @@ class Book {
 
 // display book in table class
 class Display {
-    constructor() {
-    }
-
-    addBookList(book) {
+    static addBookList(book) {
         let bookList = document.getElementById('book-list');
         let row = document.createElement('tr');
         row.innerHTML = `
@@ -28,13 +25,13 @@ class Display {
     }
 
     // clear text after add button click
-    clearInputText() {
+    static clearInputText() {
         document.getElementById('title-input').value = '';
         document.getElementById('author-input').value = '';
         document.getElementById('isbn-input').value = '';
     }
 
-    showAlert(message, className) {
+    static showAlert(message, className) {
         let div = document.createElement('div');
         div.className = `alert ${className}`;
         div.appendChild(document.createTextNode(message));
@@ -49,9 +46,10 @@ class Display {
     }
 
     // remove icon working
-    removeFromList(target) {
+    static removeFromList(target) {
         if (target.hasAttribute('href')) {
             target.parentElement.parentElement.remove();
+            Display.showAlert('Book removed!', 'success');
         }
     }
 }
@@ -65,15 +63,14 @@ function newBook(event) {
     let title = document.getElementById('title-input').value;
     let author = document.getElementById('author-input').value;
     let isbn = document.getElementById('isbn-input').value;
-    let display = new Display();
 
     if (title == '' || author == '' || isbn == '') {
-        display.showAlert('Please fill all the fields!', 'fail');
+        Display.showAlert('Please fill all the fields!', 'fail');
     } else {
         let book = new Book(title, author, isbn);
-        display.addBookList(book);
-        display.clearInputText();
-        display.showAlert('Book added!', 'success');
+        Display.addBookList(book);
+        Display.clearInputText();
+        Display.showAlert('Book added!', 'success');
     }
 
     event.preventDefault();
@@ -81,8 +78,7 @@ function newBook(event) {
 
 // remove book from table
 function removeBook(event) {
-    let display = new Display();
-    display.removeFromList(event.target);
-    display.showAlert('Book removed!', 'success');
+    Display.removeFromList(event.target);
+
     event.preventDefault();
 }
