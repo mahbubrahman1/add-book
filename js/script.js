@@ -104,7 +104,7 @@ function newBook(event) {
     let author = document.getElementById('author-input').value;
     let isbn = document.getElementById('isbn-input').value;
 
-    if (title == '' || author == '' || isbn == '') {
+    if (title === '' || author === '' || isbn === '') {
         Display.showAlert('Please fill all the fields!', 'fail');
     } else {
         let book = new Book(title, author, isbn);
